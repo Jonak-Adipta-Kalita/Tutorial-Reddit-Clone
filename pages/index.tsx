@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
+import PostBox from '../components/PostBox'
 
 const Home: NextPage = () => {
   return (
@@ -9,6 +10,10 @@ const Home: NextPage = () => {
         <title>JAK Reddit Clone</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <PostBox />
+      <div className=''>
+        {/* Feed */}
+      </div>
     </div>
   )
 }
