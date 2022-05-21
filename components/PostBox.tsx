@@ -3,6 +3,10 @@ import Avatar from './Avatar'
 import { PhotographIcon, LinkIcon } from '@heroicons/react/outline'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
+import { ADD_POST, ADD_SUBREDDIT } from '../graphql/mutations'
+import { GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
+import client from '../apollo-client'
 
 type FormData = {
   postTitle: string
@@ -13,6 +17,8 @@ type FormData = {
 
 const PostBox = () => {
   const { data: session } = useSession()
+  const [addPost] = useMutation(ADD_POST)
+  const [addSubreddit] = useMutation(ADD_SUBREDDIT)
   const [imageBoxOpen, setImageBoxOpen] = useState<boolean>(false)
   const {
     register,
@@ -25,7 +31,57 @@ const PostBox = () => {
   return (
     <form
       className="sticky top-16 z-50 rounded-md border border-gray-300 bg-white p-2"
-      onSubmit={handleSubmit(async (formData) => {})}
+      onSubmit={handleSubmit(async (formData) => {
+        try {
+          const {
+            data: { getSubredditListByTopic },
+          } = await client.query({
+            query: GET_SUBREDDIT_BY_TOPIC,
+            variables: {
+              topic: formData.subreddit,
+            },
+          })
+          const subredditExists = getSubredditListByTopic.length > 0
+          if (!subredditExists) {
+            const {
+              data: { insertSubreddit: newSubreddit },
+            } = await addSubreddit({
+              variables: {
+                topic: formData.subreddit,
+              },
+            })
+            const image = formData.postImage || ''
+            const {
+              data: { insertPost: newPost },
+            } = await addPost({
+              variables: {
+                body: formData.postBody,
+                image,
+                subreddit_id: newSubreddit.id,
+                title: formData.postTitle,
+                username: session?.user?.name,
+              },
+            })
+          } else {
+            const image = formData.postImage || ''
+            const {
+              data: { insertPost: newPost },
+            } = await addPost({
+              variables: {
+                body: formData.postBody,
+                image,
+                subreddit_id: getSubredditListByTopic[0].id,
+                title: formData.postTitle,
+                username: session?.user?.name,
+              },
+            })
+          }
+          setValue('postBody', '')
+          setValue('postImage', '')
+          setValue('postTitle', '')
+          setValue('subreddit', '')
+        } catch (error) {}
+      })}
     >
       <div className="flex items-center space-x-2">
         <Avatar />
