@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
+import Feed from '../components/Feed'
 import PostBox from '../components/PostBox'
 
 const Home: NextPage = () => {
@@ -11,7 +12,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PostBox />
-      <div className="flex">{/* Feed */}</div>
+      <div className="flex">
+        <Feed />
+      </div>
     </div>
   )
 }
