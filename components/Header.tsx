@@ -21,7 +21,7 @@ const Header = () => {
   const { data: session } = useSession()
 
   return (
-    <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm">
+    <div className="sticky top-0 z-50 flex items-center bg-white px-4 py-2 shadow-sm">
       <Link href={'/'}>
         <div className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
           <Image

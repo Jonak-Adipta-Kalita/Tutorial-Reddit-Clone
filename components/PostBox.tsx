@@ -16,7 +16,7 @@ type FormData = {
   subreddit: string
 }
 
-const PostBox = () => {
+const PostBox = ({ subreddit }: { subreddit?: string }) => {
   const { data: session } = useSession()
   const [addPost] = useMutation(ADD_POST, {
     refetchQueries: [GET_ALL_POSTS, 'getPostList'],
@@ -42,7 +42,7 @@ const PostBox = () => {
           } = await client.query({
             query: GET_SUBREDDIT_BY_TOPIC,
             variables: {
-              topic: formData.subreddit,
+              topic: subreddit || formData.subreddit,
             },
           })
           const subredditExists = getSubredditListByTopic.length > 0
@@ -103,7 +103,11 @@ const PostBox = () => {
           disabled={!session}
           className="flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none"
           placeholder={
-            session ? 'Create a post by entering a title.' : 'Sign In to Post.'
+            session
+              ? subreddit
+                ? `Create a post in r/${subreddit}`
+                : 'Create a post by entering a title.'
+              : 'Sign In to Post.'
           }
         />
         <PhotographIcon
@@ -125,15 +129,17 @@ const PostBox = () => {
               {...register('postBody')}
             />
           </div>
-          <div className="flex items-center px-2">
-            <p className="min-w-[90px]">Subreddit:</p>
-            <input
-              type="text"
-              className="m-2 flex-1 bg-blue-50 p-2 outline-none"
-              placeholder="i.e, beastnight_tv, reactjs"
-              {...register('subreddit', { required: true })}
-            />
-          </div>
+          {!subreddit && (
+            <div className="flex items-center px-2">
+              <p className="min-w-[90px]">Subreddit:</p>
+              <input
+                type="text"
+                className="m-2 flex-1 bg-blue-50 p-2 outline-none"
+                placeholder="i.e, beastnight_tv, reactjs"
+                {...register('subreddit', { required: true })}
+              />
+            </div>
+          )}
           {imageBoxOpen && (
             <div className="flex items-center px-2">
               <p className="min-w-[90px]">Image URL:</p>
