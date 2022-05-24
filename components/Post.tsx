@@ -11,17 +11,9 @@ import Avatar from './Avatar'
 import TimeAgo from 'react-timeago'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Jelly } from '@uiball/loaders'
 
 const Post = ({ post }: { post: Post }) => {
   const router = useRouter()
-
-  if (!post)
-    return (
-      <div className="flex w-full items-center justify-center p-10 text-xl">
-        <Jelly size={50} color="#FF4501" />
-      </div>
-    )
 
   return (
     <Link href={`/post/${post.id}`}>
