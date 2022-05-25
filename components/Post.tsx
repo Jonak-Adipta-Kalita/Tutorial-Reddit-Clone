@@ -17,7 +17,7 @@ const Post = ({ post }: { post: Post }) => {
 
   return (
     <Link href={`/post/${post.id}`}>
-      <div className="flex cursor-pointer rounded-md border border-gray-300 bg-white shadow-sm hover:border hover:border-gray-400">
+      <div className="flex cursor-pointer rounded-md border border-gray-300 bg-white shadow-sm hover:border hover:border-gray-400 group-hover:border-gray-400">
         <div className="flex flex-col items-center justify-start space-y-1 rounded-l-md bg-gray-50 p-4 text-gray-400">
           <ArrowUpIcon className="voteButtons hover:text-red-400" />
           <p className="text-xs font-bold text-black">{post.votes.length}</p>

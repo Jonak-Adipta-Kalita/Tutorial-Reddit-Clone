@@ -180,6 +180,13 @@ type Mutation {
       dml: INSERT
       configuration: "postgresql_config"
     )
+  insertComment(post_id: ID!, username: String!, text: String!): Comment
+    @dbquery(
+      type: "postgresql"
+      table: "comment"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
   insertSubreddit(topic: String!): Subreddit
     @dbquery(
       type: "postgresql"
