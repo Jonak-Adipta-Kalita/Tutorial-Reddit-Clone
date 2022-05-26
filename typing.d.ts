@@ -1,3 +1,11 @@
+type Vote = {
+  created_at: string
+  id: number
+  post_id: number
+  upvote: boolean
+  username: string
+}
+
 type Post = {
   created_at: string
   id: number
@@ -6,13 +14,7 @@ type Post = {
   subreddit_id: string
   title: string
   username: string
-  votes: {
-    created_at: string
-    id: number
-    post_id: number
-    upvote: boolean
-    username: string
-  }[]
+  votes: Vote[]
   comments: {
     created_at: string
     id: number

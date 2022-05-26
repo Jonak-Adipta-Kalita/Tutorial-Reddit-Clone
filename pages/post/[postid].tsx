@@ -47,10 +47,12 @@ const PostPage = () => {
         <div className="group mx-auto my-7 max-w-5xl">
           <Post post={post} />
           <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-white p-5 pl-16 group-hover:border-gray-400">
-            <p className="text-sm">
-              Comment as{' '}
-              <span className="text-red-500">{session?.user?.name}</span>
-            </p>
+            {session && (
+              <p className="text-sm">
+                Comment as{' '}
+                <span className="text-red-500">{session?.user?.name}</span>
+              </p>
+            )}
             <form
               onSubmit={handleSubmit(async (data) => {
                 const notificcation = toast.loading('Posting your Comment!!')
@@ -62,14 +64,14 @@ const PostPage = () => {
                   },
                 })
                 setValue('comment', '')
-                toast.success('Comment successfullt Posted!!', {
+                toast.success('Comment successfully Posted!!', {
                   id: notificcation,
                 })
               })}
               className="flex flex-col space-y-2"
             >
               <textarea
-                {...register('comment')}
+                {...register('comment', { required: true })}
                 disabled={!session}
                 className="h-24 rounded-md border border-gray-200 p-2 pl-4 outline-none disabled:bg-gray-50"
                 placeholder={
